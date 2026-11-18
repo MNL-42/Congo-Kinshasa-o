@@ -29,8 +29,9 @@
 <body>
 <div id="msg">Chargement…</div>
 <div id="hud">
-  Kinshasa Open World v0.1.1<br>
+  Kinshasa Open World v0.2<br>
   <span id="clock"></span><br>
+  <span id="src"></span><br>
   Gauche : se déplacer · Droite : tourner la caméra
 </div>
 <div id="stick"><div id="knob"></div></div>
@@ -44,16 +45,15 @@ function fatal(text) {
   m.textContent = text;
 }
 window.addEventListener('error', function (e) {
-  fatal('Erreur : ' + (e.message || 'inconnue') + (e.lineno ? ' (ligne ' + e.lineno + ')' : ''));
+  fatal('Erreur : ' + (e.message || 'inconnue') + (e.filename ? ' [' + e.filename.split('/').pop() + ':' + e.lineno + ']' : ''));
 });
 window.addEventListener('unhandledrejection', function (e) {
   fatal('Erreur : ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
 });
-// Si le jeu n'a pas démarré après 10 s, on le dit.
 setTimeout(function () {
   var m = document.getElementById('msg');
   if (m && m.className !== 'err') fatal('Toujours en chargement. Vérifiez votre connexion (Three.js vient de cdn.jsdelivr.net) puis rechargez.');
-}, 10000);
+}, 20000);
 </script>
 <script type="module" src="src/main.js"
   onerror="fatal('Chargement impossible : réseau coupé, ou fichier src/main.js introuvable sur le dépôt.')"></script>
