@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Kinshasa Open World</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #000;
+    touch-action: none; overscroll-behavior: none; font-family: sans-serif;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent; }
+  canvas { display: block; touch-action: none; }
+  #hud { position: fixed; top: 8px; left: 8px; color: #fff; font-size: 13px; line-height: 1.4;
+    text-shadow: 0 0 4px #000; pointer-events: none; }
+  #stick { position: fixed; box-sizing: border-box; width: 100px; height: 100px;
+    margin: -50px 0 0 -50px; border: 2px solid #fff8; border-radius: 50%;
+    display: none; pointer-events: none; }
+  #knob { position: absolute; left: 28px; top: 28px; width: 40px; height: 40px;
+    border-radius: 50%; background: #fff8; }
+  #msg { position: fixed; left: 0; right: 0; top: 40%; text-align: center; color: #fff;
+    font-size: 16px; padding: 0 16px; pointer-events: none; }
+  #msg.err { color: #ff8080; font-size: 13px; word-break: break-word; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="msg">Chargement…</div>
+<div id="hud">
+  Kinshasa Open World v0.1.1<br>
+  <span id="clock"></span><br>
+  Gauche : se déplacer · Droite : tourner la caméra
+</div>
+<div id="stick"><div id="knob"></div></div>
+
+<script>
+// Affiche les erreurs directement à l'écran (pas besoin d'outils de développement).
+function fatal(text) {
+  var m = document.getElementById('msg');
+  if (!m) return;
+  m.className = 'err';
+  m.textContent = text;
+}
+window.addEventListener('error', function (e) {
+  fatal('Erreur : ' + (e.message || 'inconnue') + (e.lineno ? ' (ligne ' + e.lineno + ')' : ''));
+});
+window.addEventListener('unhandledrejection', function (e) {
+  fatal('Erreur : ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+// Si le jeu n'a pas démarré après 10 s, on le dit.
+setTimeout(function () {
+  var m = document.getElementById('msg');
+  if (m && m.className !== 'err') fatal('Toujours en chargement. Vérifiez votre connexion (Three.js vient de cdn.jsdelivr.net) puis rechargez.');
+}, 10000);
+</script>
+<script type="module" src="src/main.js"
+  onerror="fatal('Chargement impossible : réseau coupé, ou fichier src/main.js introuvable sur le dépôt.')"></script>
+</body>
+</html>
