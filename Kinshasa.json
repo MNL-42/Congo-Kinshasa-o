@@ -1,0 +1,261 @@
+
+{
+  "metadata": {
+    "name": "Kinshasa Geographic Database",
+    "country": "République démocratique du Congo",
+    "country_code": "CD",
+    "province": "Kinshasa",
+    "language": "fr",
+    "coordinate_system": "WGS84",
+    "coordinate_order": ["longitude", "latitude"],
+    "format": "GeoJSON-compatible",
+    "version": "1.0",
+    "description": "Base géographique de Kinshasa"
+  },
+  "city": {
+    "name": "Kinshasa",
+    "type": "ville-province",
+    "latitude": -4.3217,
+    "longitude": 15.3123,
+    "population": null,
+    "country": "RDC"
+  },
+  "administrative_divisions": {
+    "total_communes": 24,
+    "districts": [
+      {
+        "name": "Lukunga",
+        "communes": [
+          "Barumbu",
+          "Gombe",
+          "Kinshasa",
+          "Kintambo",
+          "Lingwala",
+          "Mont-Ngafula",
+          "Ngaliema"
+        ]
+      },
+      {
+        "name": "Funa",
+        "communes": [
+          "Bandalungwa",
+          "Bumbu",
+          "Kalamu",
+          "Kasa-Vubu",
+          "Makala",
+          "Ngiri-Ngiri",
+          "Selembao"
+        ]
+      },
+      {
+        "name": "Mont-Amba",
+        "communes": [
+          "Kisenso",
+          "Lemba",
+          "Limete",
+          "Matete",
+          "Ngaba"
+        ]
+      },
+      {
+        "name": "Tshangu",
+        "communes": [
+          "Kimbanseke",
+          "Maluku",
+          "Masina",
+          "N'Djili",
+          "N'Sele"
+        ]
+      }
+    ]
+  },
+  "landmarks": [
+    {
+      "id": "KIN-001",
+      "name": "Palais du Peuple",
+      "category": "government",
+      "commune": "Lingwala",
+      "address": "Boulevard Triomphal",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-002",
+      "name": "Palais de la Nation",
+      "category": "government",
+      "commune": "Gombe",
+      "address": "Avenue de Lemera",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-003",
+      "name": "Stade des Martyrs",
+      "category": "sports",
+      "commune": "Lingwala",
+      "address": "Avenue des Huileries",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-004",
+      "name": "Musée National de la RDC",
+      "category": "museum",
+      "commune": "Lingwala",
+      "address": "Boulevard Triomphal",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-005",
+      "name": "Tour de l'Échangeur",
+      "category": "monument",
+      "commune": "Limete",
+      "address": "Place de la Reconstruction",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-006",
+      "name": "Centre Culturel et Artistique pour les Pays d'Afrique Centrale",
+      "category": "culture",
+      "commune": "Kasa-Vubu",
+      "address": "Boulevard Triomphal",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-007",
+      "name": "Centre Financier de Kinshasa",
+      "category": "business",
+      "commune": "Gombe",
+      "address": null,
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-008",
+      "name": "Université de Kinshasa",
+      "category": "university",
+      "commune": "Lemba",
+      "address": "Mont Amba",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-009",
+      "name": "Gare Centrale",
+      "category": "transport",
+      "commune": "Gombe",
+      "address": "Avenue Isiro",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "KIN-010",
+      "name": "Aéroport International de N'Djili",
+      "category": "airport",
+      "commune": "N'Sele",
+      "address": "Zone aéroportuaire de N'Djili",
+      "latitude": null,
+      "longitude": null
+    }
+  ],
+  "major_avenues": [
+    {
+      "name": "Boulevard du 30 Juin",
+      "category": "main_road",
+      "commune": "Gombe"
+    },
+    {
+      "name": "Boulevard Triomphal",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue des Huileries",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue Kasa-Vubu",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue de la Libération",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue de la Justice",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue de la Victoire",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue de l'Université",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue Kabambare",
+      "category": "main_road"
+    },
+    {
+      "name": "Avenue Wangata",
+      "category": "main_road"
+    }
+  ],
+  "building_categories": [
+    "government",
+    "school",
+    "university",
+    "hospital",
+    "clinic",
+    "pharmacy",
+    "hotel",
+    "restaurant",
+    "shopping_center",
+    "market",
+    "bank",
+    "church",
+    "mosque",
+    "stadium",
+    "museum",
+    "office",
+    "residential",
+    "industrial",
+    "airport",
+    "transport_station"
+  ],
+  "geographic_objects": {
+    "buildings": [],
+    "roads": [],
+    "neighborhoods": [],
+    "markets": [],
+    "hospitals": [],
+    "schools": [],
+    "universities": [],
+    "hotels": [],
+    "restaurants": [],
+    "parks": [],
+    "rivers": [],
+    "bridges": [],
+    "transport_stations": []
+  },
+  "data_sources": [
+    {
+      "name": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "purpose": "Routes, bâtiments et points d'intérêt"
+    },
+    {
+      "name": "Geofabrik",
+      "url": "https://download.geofabrik.de/africa/congo-democratic-republic.html",
+      "purpose": "Extraction cartographique de la RDC"
+    },
+    {
+      "name": "World Bank",
+      "url": "https://datacatalog.worldbank.org/search/dataset/0039581/kinshasa-communes-municipalities",
+      "purpose": "Limites administratives des communes"
+    }
+  ]
+}
