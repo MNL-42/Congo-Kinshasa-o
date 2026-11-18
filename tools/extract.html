@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extracteur de carte OpenStreetMap</title>
+<style>
+  body { margin: 0; padding: 16px; font-family: sans-serif; background: #111; color: #eee; line-height: 1.4; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p, label { font-size: 14px; }
+  label { display: block; margin: 10px 0 2px; }
+  input, select { width: 100%; box-sizing: border-box; font-size: 16px; padding: 8px; border-radius: 6px; border: 1px solid #555; background: #222; color: #fff; }
+  button, a.btn { display: block; width: 100%; box-sizing: border-box; margin: 12px 0 0; padding: 12px; font-size: 16px; text-align: center;
+    border: 0; border-radius: 8px; background: #2a7fff; color: #fff; text-decoration: none; }
+  button.alt { background: #444; }
+  button:disabled { opacity: .5; }
+  #dl { display: none; background: #1a9a4a; }
+  pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; background: #000; padding: 10px; border-radius: 6px; min-height: 60px; }
+</style>
+</head>
+<body>
+<h1>Extracteur de carte OpenStreetMap</h1>
+<p>Télécharge les routes et bâtiments autour d'un point et crée le fichier <b>kinshasa.json</b> pour le jeu.
+Une connexion Internet est nécessaire. Prévois 10 à 60 secondes.</p>
+
+<label for="name">Nom de la zone</label>
+<input id="name">
+<label for="lat">Latitude (négative = Sud)</label>
+<input id="lat" inputmode="decimal">
+<label for="lon">Longitude</label>
+<input id="lon" inputmode="decimal">
+<label for="radius">Rayon autour du point</label>
+<select id="radius">
+  <option value="400">400 m (léger)</option>
+  <option value="700" selected>700 m (recommandé)</option>
+  <option value="1000">1000 m (lourd)</option>
+</select>
+<button id="gps" class="alt">Utiliser ma position GPS</button>
+<button id="go">Extraire la carte</button>
+<a id="dl" class="btn" download="kinshasa.json">Télécharger kinshasa.json</a>
+<pre id="log">Prêt.</pre>
+
+<script type="module">
+import { CONFIG } from '../src/config.js';
+import { overpassQuery, convert } from '../src/osm.js';
+
+const $ = id => document.getElementById(id);
+const SERVERS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+];
+$('name').value = CONFIG.DEFAULT_CENTER.name;
+$('lat').value = CONFIG.DEFAULT_CENTER.lat;
+$('lon').value = CONFIG.DEFAULT_CENTER.lon;
+$('radius').value = String(CONFIG.DEFAULT_RADIUS);
+const log = t => { $('log').textContent += '\n' + t; };
+
+$('gps').onclick = () => {
+  if (!navigator.geolocation) return log('GPS indisponible sur ce navigateur.');
+  log('Recherche de la position…');
+  navigator.geolocation.getCurrentPosition(
+    p => { $('lat').value = p.coords.latitude.toFixed(5); $('lon').value = p.coords.longitude.toFixed(5); $('name').value = 'Ma position'; log('Position récupérée.'); },
+    e => log('GPS refusé ou indisponible : ' + e.message));
+};
+
+async function fetchOverpass(query) {
+  let lastErr = null;
+  for (const url of SERVERS) {
+    try {
+      log('Serveur : ' + new URL(url).host + ' …');
+      const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 100000);
+      const res = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(query),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, signal: ctl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+      if (!json.elements) throw new Error('réponse inattendue');
+      return json;
+    } catch (e) { lastErr = e; log('  échec : ' + e.message); }
+  }
+  throw lastErr || new Error('aucun serveur');
+}
+
+$('go').onclick = async () => {
+  const lat = parseFloat($('lat').value), lon = parseFloat($('lon').value), radius = parseInt($('radius').value, 10);
+  if (!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return log('Coordonnées invalides.');
+  $('go').disabled = true; $('dl').style.display = 'none'; $('log').textContent = 'Démarrage…';
+  try {
+    const origin = { lat, lon };
+    const osm = await fetchOverpass(overpassQuery(origin, radius));
+    log(osm.elements.length + ' éléments reçus. Conversion…');
+    const data = convert(osm, origin, radius, $('name').value || 'Carte OSM');
+    const text = JSON.stringify(data);
+    log(`Routes : ${data.roads.length} · Bâtiments : ${data.buildings.length} · Eau : ${data.water.length} · Parcs : ${data.parks.length}`);
+    log('Taille du fichier : ' + (text.length / 1048576).toFixed(2) + ' Mo');
+    if (!data.roads.length) log('ATTENTION : aucune route trouvée. Vérifie les coordonnées.');
+    if (text.length > 8 * 1048576) log('ATTENTION : fichier lourd. Choisis un rayon plus petit.');
+    const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+    $('dl').href = url; $('dl').style.display = 'block';
+    log('Terminé. Touche le bouton vert pour télécharger, puis envoie le fichier dans le dossier data/ de GitHub.');
+  } catch (e) { log('ÉCHEC : ' + e.message + '. Réessaie dans une minute (les serveurs gratuits sont parfois saturés).'); }
+  $('go').disabled = false;
+};
+</script>
+</body>
+</html>
